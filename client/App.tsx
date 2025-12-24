@@ -43,4 +43,13 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+// Store root instance to prevent re-creating on HMR
+let root: ReturnType<typeof createRoot> | null = null;
+
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  if (!root) {
+    root = createRoot(rootElement);
+  }
+  root.render(<App />);
+}
