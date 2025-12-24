@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/DashboardPages/Projects";
+import NewProject from "./pages/DashboardPages/NewProject";
 import Deployments from "./pages/DashboardPages/Deployments";
 import Domains from "./pages/DashboardPages/Domains";
 import Analytics from "./pages/DashboardPages/Analytics";
