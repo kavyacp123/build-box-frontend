@@ -13,7 +13,9 @@ export default function Footer() {
               </div>
               <span className="font-bold">BuildBox</span>
             </div>
-            <p className="text-foreground/60 text-sm">Deploy. Scale. Ship Fast.</p>
+            <p className="text-foreground/60 text-sm">
+              Deploy. Scale. Ship Fast.
+            </p>
           </div>
 
           {/* Product */}
@@ -21,22 +23,34 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Product</h3>
             <ul className="space-y-2 text-sm text-foreground/60">
               <li>
-                <a href="#features" className="hover:text-foreground transition-colors">
+                <a
+                  href="#features"
+                  className="hover:text-foreground transition-colors"
+                >
                   Features
                 </a>
               </li>
               <li>
-                <a href="#pricing" className="hover:text-foreground transition-colors">
+                <a
+                  href="#pricing"
+                  className="hover:text-foreground transition-colors"
+                >
                   Pricing
                 </a>
               </li>
               <li>
-                <a href="#security" className="hover:text-foreground transition-colors">
+                <a
+                  href="#security"
+                  className="hover:text-foreground transition-colors"
+                >
                   Security
                 </a>
               </li>
               <li>
-                <a href="#status" className="hover:text-foreground transition-colors">
+                <a
+                  href="#status"
+                  className="hover:text-foreground transition-colors"
+                >
                   Status
                 </a>
               </li>
@@ -48,22 +62,34 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Developers</h3>
             <ul className="space-y-2 text-sm text-foreground/60">
               <li>
-                <a href="#docs" className="hover:text-foreground transition-colors">
+                <a
+                  href="#docs"
+                  className="hover:text-foreground transition-colors"
+                >
                   Documentation
                 </a>
               </li>
               <li>
-                <a href="#api" className="hover:text-foreground transition-colors">
+                <a
+                  href="#api"
+                  className="hover:text-foreground transition-colors"
+                >
                   API
                 </a>
               </li>
               <li>
-                <a href="#github" className="hover:text-foreground transition-colors">
+                <a
+                  href="#github"
+                  className="hover:text-foreground transition-colors"
+                >
                   GitHub
                 </a>
               </li>
               <li>
-                <a href="#support" className="hover:text-foreground transition-colors">
+                <a
+                  href="#support"
+                  className="hover:text-foreground transition-colors"
+                >
                   Support
                 </a>
               </li>
@@ -75,22 +101,34 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-sm text-foreground/60">
               <li>
-                <a href="#about" className="hover:text-foreground transition-colors">
+                <a
+                  href="#about"
+                  className="hover:text-foreground transition-colors"
+                >
                   About
                 </a>
               </li>
               <li>
-                <a href="#blog" className="hover:text-foreground transition-colors">
+                <a
+                  href="#blog"
+                  className="hover:text-foreground transition-colors"
+                >
                   Blog
                 </a>
               </li>
               <li>
-                <a href="#careers" className="hover:text-foreground transition-colors">
+                <a
+                  href="#careers"
+                  className="hover:text-foreground transition-colors"
+                >
                   Careers
                 </a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-foreground transition-colors">
+                <a
+                  href="#contact"
+                  className="hover:text-foreground transition-colors"
+                >
                   Contact
                 </a>
               </li>
@@ -104,13 +142,22 @@ export default function Footer() {
             &copy; 2024 BuildBox. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-foreground/60 mt-4 md:mt-0">
-            <a href="#privacy" className="hover:text-foreground transition-colors">
+            <a
+              href="#privacy"
+              className="hover:text-foreground transition-colors"
+            >
               Privacy
             </a>
-            <a href="#terms" className="hover:text-foreground transition-colors">
+            <a
+              href="#terms"
+              className="hover:text-foreground transition-colors"
+            >
               Terms
             </a>
-            <a href="#cookies" className="hover:text-foreground transition-colors">
+            <a
+              href="#cookies"
+              className="hover:text-foreground transition-colors"
+            >
               Cookies
             </a>
           </div>

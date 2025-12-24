@@ -95,7 +95,10 @@ export default function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium mb-2"
+              >
                 Password
               </label>
               <Input
@@ -113,7 +116,10 @@ export default function Login() {
                 <input type="checkbox" className="w-4 h-4 rounded" />
                 <span>Remember me</span>
               </label>
-              <a href="#forgot" className="text-primary hover:text-primary/80 transition-colors">
+              <a
+                href="#forgot"
+                className="text-primary hover:text-primary/80 transition-colors"
+              >
                 Forgot password?
               </a>
             </div>
@@ -130,7 +136,10 @@ export default function Login() {
           {/* Sign up link */}
           <p className="text-center text-sm text-foreground/60 mt-6">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors font-medium">
+            <Link
+              to="/signup"
+              className="text-primary hover:text-primary/80 transition-colors font-medium"
+            >
               Sign up
             </Link>
           </p>
@@ -140,11 +149,17 @@ export default function Login() {
         <div className="text-center text-xs text-foreground/50 mt-8">
           <p>
             By signing in, you agree to our{" "}
-            <a href="#terms" className="text-foreground/70 hover:text-foreground transition-colors">
+            <a
+              href="#terms"
+              className="text-foreground/70 hover:text-foreground transition-colors"
+            >
               Terms of Service
             </a>{" "}
             and{" "}
-            <a href="#privacy" className="text-foreground/70 hover:text-foreground transition-colors">
+            <a
+              href="#privacy"
+              className="text-foreground/70 hover:text-foreground transition-colors"
+            >
               Privacy Policy
             </a>
           </p>

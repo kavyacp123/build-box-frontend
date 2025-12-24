@@ -51,12 +51,17 @@ export default function NewProject() {
               {/* Main form */}
               <div className="lg:col-span-2">
                 <Card className="bg-card border border-border p-6">
-                  <h2 className="text-lg font-semibold mb-6">Project Details</h2>
+                  <h2 className="text-lg font-semibold mb-6">
+                    Project Details
+                  </h2>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Project Name */}
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Project Name
                       </label>
                       <Input
@@ -75,7 +80,10 @@ export default function NewProject() {
 
                     {/* Git Repository */}
                     <div>
-                      <label htmlFor="repo" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="repo"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Git Repository URL
                       </label>
                       <div className="relative">
@@ -127,7 +135,8 @@ export default function NewProject() {
                       </label>
                       <div className="bg-input/30 rounded-lg p-4 border border-border/50">
                         <p className="text-xs text-foreground/60">
-                          You can add environment variables after creating the project
+                          You can add environment variables after creating the
+                          project
                         </p>
                       </div>
                     </div>
@@ -180,7 +189,9 @@ export default function NewProject() {
                   </ul>
 
                   <div className="mt-6 pt-6 border-t border-border/50">
-                    <h4 className="font-semibold text-sm mb-3">GitHub Integration</h4>
+                    <h4 className="font-semibold text-sm mb-3">
+                      GitHub Integration
+                    </h4>
                     <Button
                       variant="outline"
                       className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"

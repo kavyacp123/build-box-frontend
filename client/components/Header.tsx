@@ -22,16 +22,28 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-foreground/70 hover:text-foreground transition-colors text-sm">
+            <Link
+              to="/"
+              className="text-foreground/70 hover:text-foreground transition-colors text-sm"
+            >
               Home
             </Link>
-            <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors text-sm">
+            <a
+              href="#features"
+              className="text-foreground/70 hover:text-foreground transition-colors text-sm"
+            >
               Features
             </a>
-            <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors text-sm">
+            <a
+              href="#pricing"
+              className="text-foreground/70 hover:text-foreground transition-colors text-sm"
+            >
               Pricing
             </a>
-            <a href="#docs" className="text-foreground/70 hover:text-foreground transition-colors text-sm">
+            <a
+              href="#docs"
+              className="text-foreground/70 hover:text-foreground transition-colors text-sm"
+            >
               Docs
             </a>
           </nav>
@@ -42,7 +54,9 @@ export default function Header() {
               <Button variant="ghost">Sign in</Button>
             </Link>
             <Link to="/signup">
-              <Button className="bg-primary hover:bg-primary/90">Get Started</Button>
+              <Button className="bg-primary hover:bg-primary/90">
+                Get Started
+              </Button>
             </Link>
           </div>
 
@@ -62,24 +76,40 @@ export default function Header() {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-border py-4 space-y-3">
-            <Link to="/" className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2">
+            <Link
+              to="/"
+              className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2"
+            >
               Home
             </Link>
-            <a href="#features" className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2">
+            <a
+              href="#features"
+              className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2"
+            >
               Features
             </a>
-            <a href="#pricing" className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2">
+            <a
+              href="#pricing"
+              className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2"
+            >
               Pricing
             </a>
-            <a href="#docs" className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2">
+            <a
+              href="#docs"
+              className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2"
+            >
               Docs
             </a>
             <div className="flex gap-2 pt-2">
               <Link to="/login" className="flex-1">
-                <Button variant="ghost" className="w-full">Sign in</Button>
+                <Button variant="ghost" className="w-full">
+                  Sign in
+                </Button>
               </Link>
               <Link to="/signup" className="flex-1">
-                <Button className="w-full bg-primary hover:bg-primary/90">Get Started</Button>
+                <Button className="w-full bg-primary hover:bg-primary/90">
+                  Get Started
+                </Button>
               </Link>
             </div>
           </div>

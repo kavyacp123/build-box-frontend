@@ -2,7 +2,14 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
-import { Plus, GitBranch, Clock, CheckCircle, AlertCircle, Zap } from "lucide-react";
+import {
+  Plus,
+  GitBranch,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Zap,
+} from "lucide-react";
 
 const projects = [
   {
@@ -171,7 +178,10 @@ export default function Dashboard() {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold">Your Projects</h2>
-                <a href="#view-all" className="text-primary hover:text-primary/80 transition-colors text-sm">
+                <a
+                  href="#view-all"
+                  className="text-primary hover:text-primary/80 transition-colors text-sm"
+                >
                   View all
                 </a>
               </div>
@@ -207,7 +217,10 @@ export default function Dashboard() {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold">Recent Deployments</h2>
-                <a href="#view-all" className="text-primary hover:text-primary/80 transition-colors text-sm">
+                <a
+                  href="#view-all"
+                  className="text-primary hover:text-primary/80 transition-colors text-sm"
+                >
                   View timeline
                 </a>
               </div>

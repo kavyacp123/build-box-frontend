@@ -22,7 +22,10 @@ const menuItems = [
 
 export default function DashboardSidebar() {
   const location = useLocation();
-  const [user, setUser] = useState({ name: "John Doe", email: "john@example.com" });
+  const [user, setUser] = useState({
+    name: "John Doe",
+    email: "john@example.com",
+  });
 
   return (
     <div className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
@@ -63,10 +66,15 @@ export default function DashboardSidebar() {
       {/* User section */}
       <div className="border-t border-sidebar-border p-4 space-y-3">
         <div className="px-4 py-3 bg-sidebar-accent rounded-lg">
-          <p className="font-semibold text-sm text-sidebar-foreground">{user.name}</p>
+          <p className="font-semibold text-sm text-sidebar-foreground">
+            {user.name}
+          </p>
           <p className="text-xs text-sidebar-foreground/60">{user.email}</p>
         </div>
-        <Button variant="ghost" className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent"
+        >
           <LogOut className="w-4 h-4 mr-2" />
           <span className="text-sm">Sign out</span>
         </Button>

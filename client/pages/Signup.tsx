@@ -122,7 +122,10 @@ export default function Signup() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium mb-2"
+              >
                 Password
               </label>
               <Input
@@ -137,7 +140,10 @@ export default function Signup() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium mb-2"
+              >
                 Confirm Password
               </label>
               <Input
@@ -155,11 +161,17 @@ export default function Signup() {
               <input type="checkbox" className="w-4 h-4 rounded mt-1" />
               <span className="text-foreground/60">
                 I agree to the{" "}
-                <a href="#terms" className="text-primary hover:text-primary/80 transition-colors">
+                <a
+                  href="#terms"
+                  className="text-primary hover:text-primary/80 transition-colors"
+                >
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="#privacy" className="text-primary hover:text-primary/80 transition-colors">
+                <a
+                  href="#privacy"
+                  className="text-primary hover:text-primary/80 transition-colors"
+                >
                   Privacy Policy
                 </a>
               </span>
@@ -177,7 +189,10 @@ export default function Signup() {
           {/* Sign in link */}
           <p className="text-center text-sm text-foreground/60 mt-6">
             Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:text-primary/80 transition-colors font-medium">
+            <Link
+              to="/login"
+              className="text-primary hover:text-primary/80 transition-colors font-medium"
+            >
               Sign in
             </Link>
           </p>

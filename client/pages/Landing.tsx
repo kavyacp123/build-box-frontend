@@ -25,7 +25,8 @@ const features = [
   {
     icon: BarChart3,
     title: "Real-time Analytics",
-    description: "Monitor performance, traffic, and errors in real-time dashboards",
+    description:
+      "Monitor performance, traffic, and errors in real-time dashboards",
   },
   {
     icon: Globe,
@@ -45,7 +46,8 @@ const features = [
   {
     icon: GitBranch,
     title: "Git Integration",
-    description: "Connect GitHub, GitLab, or Bitbucket for automatic deployments",
+    description:
+      "Connect GitHub, GitLab, or Bitbucket for automatic deployments",
   },
 ];
 
@@ -139,7 +141,10 @@ export default function Landing() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link to="/signup">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-base px-8">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-base px-8"
+              >
                 Get Started <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -217,7 +222,9 @@ export default function Landing() {
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                     <Icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    {feature.title}
+                  </h3>
                   <p className="text-foreground/60">{feature.description}</p>
                 </Card>
               );
@@ -262,9 +269,7 @@ export default function Landing() {
                 </p>
 
                 <div className="mb-6">
-                  <span className="text-4xl font-bold">
-                    ${plan.price}
-                  </span>
+                  <span className="text-4xl font-bold">${plan.price}</span>
                   {plan.price !== "Custom" && (
                     <span className="text-foreground/60 ml-2">/month</span>
                   )}
@@ -307,7 +312,10 @@ export default function Landing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/signup">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-base px-8">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-base px-8"
+              >
                 Start Deploying Now
               </Button>
             </Link>

@@ -76,6 +76,7 @@ client/
 ## 🎯 Key Features
 
 ### Landing Page
+
 - ✨ Animated gradient hero section
 - 📦 Feature grid with icons
 - 💰 Pricing cards (Starter, Professional, Enterprise)
@@ -85,6 +86,7 @@ client/
 - 📱 Fully responsive design
 
 ### Authentication Pages
+
 - 🔐 Modern glass effect cards
 - 🔑 OAuth buttons (GitHub, Google)
 - 📝 Email/password forms
@@ -93,6 +95,7 @@ client/
 - 📱 Mobile-optimized layout
 
 ### Dashboard
+
 - 📊 Real-time statistics cards
 - 📦 Project cards with status badges
 - 📅 Recent deployments timeline
@@ -103,21 +106,24 @@ client/
 ## 🎨 Customization
 
 ### Colors
+
 All colors are managed via CSS variables in `client/global.css`:
 
 ```css
 /* In :root and .dark selectors */
---primary: 210 100% 50%;        /* Neon blue */
---background: 222.2 84% 4.9%;   /* Deep black */
---card: 217.2 32.6% 17.5%;      /* Dark gray */
+--primary: 210 100% 50%; /* Neon blue */
+--background: 222.2 84% 4.9%; /* Deep black */
+--card: 217.2 32.6% 17.5%; /* Dark gray */
 ```
 
 ### Fonts
+
 - **Primary Font:** Inter (Google Fonts)
 - **Font Sizes:** Tailwind default scale with custom extensions
 - **Font Weights:** 400, 600, 700, 800
 
 ### Spacing
+
 - Uses Tailwind's default spacing scale
 - 16px base unit (4px increments)
 - Consistent padding/margins across components
@@ -125,6 +131,7 @@ All colors are managed via CSS variables in `client/global.css`:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 16+ or higher
 - npm, yarn, or pnpm
 
@@ -145,6 +152,7 @@ pnpm run test
 ```
 
 ### Development
+
 The app uses Vite for hot module reloading. Changes to any file are instantly reflected in the browser.
 
 ```bash
@@ -158,17 +166,15 @@ Visit `http://localhost:5173` in your browser.
 ### Adding New Pages
 
 1. Create a new page in `client/pages/`:
+
 ```tsx
 export default function MyPage() {
-  return (
-    <div className="...">
-      {/* Your content */}
-    </div>
-  );
+  return <div className="...">{/* Your content */}</div>;
 }
 ```
 
 2. Add the route in `client/App.tsx`:
+
 ```tsx
 <Route path="/my-page" element={<MyPage />} />
 ```
@@ -221,6 +227,7 @@ Use Tailwind CSS classes for styling:
 ### Colors
 
 #### Semantic
+
 - **Primary (Blue):** Action items, links, highlights - `text-primary`, `bg-primary`
 - **Background:** Main background - `bg-background`
 - **Card:** Card backgrounds - `bg-card`
@@ -229,6 +236,7 @@ Use Tailwind CSS classes for styling:
 - **Muted:** Disabled, secondary text - `text-muted-foreground`
 
 #### Status
+
 - **Success (Green):** ✓ Completed, online
 - **Warning (Yellow):** ⚠ In progress, caution
 - **Error (Red):** ✗ Failed, offline
@@ -245,6 +253,7 @@ Use Tailwind CSS classes for styling:
 ### Components
 
 #### Buttons
+
 ```tsx
 <Button>Primary</Button>
 <Button variant="outline">Secondary</Button>
@@ -255,6 +264,7 @@ Use Tailwind CSS classes for styling:
 ```
 
 #### Cards
+
 ```tsx
 <Card className="p-6">
   <h3 className="font-bold">Title</h3>
@@ -263,6 +273,7 @@ Use Tailwind CSS classes for styling:
 ```
 
 #### Inputs
+
 ```tsx
 <Input placeholder="Enter text..." />
 <Input type="email" placeholder="Email..." />
@@ -274,12 +285,14 @@ Use Tailwind CSS classes for styling:
 The dashboard includes sample data:
 
 **Projects:**
+
 - React Dashboard (success)
 - API Server (building)
 - Mobile App Backend (failed)
 - Docs Website (success)
 
 **Deployments:**
+
 - Recent deployment history with commit info
 - Status indicators (success, failed, building)
 - Deployment metadata (branch, author, time)

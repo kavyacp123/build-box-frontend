@@ -32,7 +32,8 @@ export default function PlaceholderPage({
             {icon}
             <h2 className="text-2xl font-bold mt-6">Coming Soon</h2>
             <p className="text-foreground/60 max-w-md mt-2">
-              This page is being built. Ask me to continue developing this section if you'd like to see the full implementation.
+              This page is being built. Ask me to continue developing this
+              section if you'd like to see the full implementation.
             </p>
 
             <div className="flex items-center justify-center gap-2 mt-8 text-sm text-primary">
