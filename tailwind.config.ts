@@ -80,10 +80,28 @@ export default {
             height: "0",
           },
         },
+        "glow-pulse": {
+          "0%, 100%": {
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0.8",
+          },
+        },
+        "float": {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+          },
+          "50%": {
+            transform: "translateY(-10px)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },
