@@ -21,7 +21,7 @@ export default function NewProject() {
       return;
     }
     try{
-      const response = await axios.post(`${process.env.VITE_BACKEND_URL}/api/projects`, { projectName, repository });
+      const response = await axios.post(`http://localhost:9000/deploy`, { projectName, link:repository });
       if(response.status === 200){
         navigate("/dashboard");
       }
