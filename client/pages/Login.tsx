@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Github, Mail } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,9 +16,22 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     // Simulate auth delay
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1000);
+    if(email === "" || password === "") {
+      return;
+    }
+    try{
+      const response = await axios.post(`${process.env.VITE_BACKEND_URL}/api/login`, { email, password });
+      if(response.status === 200){
+        const {token, user} = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate("/dashboard");
+      }
+    }catch(e){
+      console.log(e)
+    }finally{
+      setLoading(false);
+    }
   };
 
   return (

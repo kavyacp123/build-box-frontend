@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Github, Mail } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -26,9 +27,19 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     // Simulate auth delay
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1000);
+    if(formData.name === "" || formData.email === "" || formData.password === "" || formData.confirmPassword === "") {
+      return;
+    }
+    try{
+      const response = await axios.post(`${process.env.VITE_BACKEND_URL}/api/signup`, formData);
+      if(response.status === 200){
+        navigate("/login");
+        setLoading(false);
+      }
+    }catch(e){
+      console.log(e);
+      setLoading(false);
+    }
   };
 
   return (
