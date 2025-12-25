@@ -20,11 +20,11 @@ export default function Login() {
       return;
     }
     try{
-      const response = await axios.post(`${process.env.VITE_BACKEND_URL}/api/login`, { email, password });
+      const response = await axios.post("http://localhost:9000/auth/login", { email, password });
       if(response.status === 200){
-        const {token, user} = response.data;
+        const {token, name} = response.data;
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("name", name);
         navigate("/dashboard");
       }
     }catch(e){
@@ -72,6 +72,7 @@ export default function Login() {
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
+              onClick={handleLoginWithGitHub}
             >
               <Github className="w-4 h-4 mr-2" />
               Continue with GitHub
@@ -79,6 +80,7 @@ export default function Login() {
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
+              onClick={handleLoginWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
               Continue with Google

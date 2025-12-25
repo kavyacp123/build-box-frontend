@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
@@ -21,13 +22,25 @@ const menuItems = [
 ];
 
 export default function DashboardSidebar() {
+  
+  const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState({
     name: "John Doe",
     email: "john@example.com",
   });
+  
+  const handleSignOut = () => {
+    console.log("Signing out");
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
+    navigate("/login");
+  }
+
 
   return (
+
+
     <div className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border">
@@ -75,8 +88,8 @@ export default function DashboardSidebar() {
           variant="ghost"
           className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent"
         >
-          <LogOut className="w-4 h-4 mr-2" />
-          <span className="text-sm">Sign out</span>
+          <LogOut className="w-4 h-4 mr-2"/>
+          <span className="text-sm" onClick={handleSignOut}>Sign out</span>
         </Button>
       </div>
     </div>

@@ -17,6 +17,7 @@ import Domains from "./pages/DashboardPages/Domains";
 import Analytics from "./pages/DashboardPages/Analytics";
 import SettingsPage from "./pages/DashboardPages/Settings";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./context/AuthChecker.jsx";
 
 const queryClient = new QueryClient();
 
@@ -30,13 +31,13 @@ const App = () => (
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/projects/new" element={<NewProject />} />
-          <Route path="/dashboard/projects" element={<Projects />} />
-          <Route path="/dashboard/deployments" element={<Deployments />} />
-          <Route path="/dashboard/domains" element={<Domains />} />
-          <Route path="/dashboard/analytics" element={<Analytics />} />
-          <Route path="/dashboard/settings" element={<SettingsPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard/projects/new" element={<ProtectedRoute><NewProject /></ProtectedRoute>} />
+          <Route path="/dashboard/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
+          <Route path="/dashboard/deployments" element={<ProtectedRoute><Deployments /></ProtectedRoute>} />
+          <Route path="/dashboard/domains" element={<ProtectedRoute><Domains /></ProtectedRoute>} />
+          <Route path="/dashboard/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+          <Route path="/dashboard/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
