@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import { ArrowLeft, Github, GitBranch } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 export default function NewProject() {
   const navigate = useNavigate();
@@ -16,9 +17,19 @@ export default function NewProject() {
     e.preventDefault();
     setLoading(true);
     // Simulate API call
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1500);
+    if(projectName === "" || repository === "") {
+      return;
+    }
+    try{
+      const response = await axios.post(`${process.env.VITE_BACKEND_URL}/api/projects`, { projectName, repository });
+      if(response.status === 200){
+        navigate("/dashboard");
+      }
+    }catch(e){
+      console.log(e)
+    }finally{
+      setLoading(false);
+    }
   };
 
   return (
