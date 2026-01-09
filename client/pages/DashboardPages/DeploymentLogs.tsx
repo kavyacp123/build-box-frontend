@@ -112,7 +112,7 @@ export default function DeploymentLogs() {
   // 🌍 Construct URL ONLY in frontend
   const frontendUrl =
     status === "SUCCESS" && userId && projectName
-      ? `https://buildbox-frontend.s3.ap-south-1.amazonaws.com/${userId}.${projectName}/Frontend/index.html`
+      ? `https://buildbox-frontend.s3.ap-south-1.amazonaws.com/${userId}/${projectName}/Frontend/index.html`
       : null;
 
   return (
