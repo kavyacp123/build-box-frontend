@@ -44,7 +44,7 @@ export default function Signup() {
 
   const handleSignUpWithGitHub = async () => {
     try{
-      const response = await axios.post("http://localhost:9000/auth/oauth/github");
+      const response = await axios.post("http://localhost:9000/oauth2/authorization/google");
       if(response.status === 200){
         navigate("/login");
         setLoading(false);
@@ -56,7 +56,7 @@ export default function Signup() {
 
   const handleSignUpWithGoogle = async () => {
     try{
-      const response = await axios.post("http://localhost:9000/auth/oauth/google");
+      const response = await axios.post("http://localhost:9000/oauth2/authorization/google");
       if(response.status === 200){
         navigate("/login");
         setLoading(false);
@@ -104,18 +104,22 @@ export default function Signup() {
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              onClick={handleSignUpWithGitHub}
+              // onClick={handleSignUpWithGitHub}
             >
               <Github className="w-4 h-4 mr-2" />
-              Sign up with GitHub
+              <a href="http://localhost:9000/oauth2/authorization/github">
+                Login with Google
+              </a>
             </Button>
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              onClick={handleSignUpWithGoogle}
+              // onClick={handleSignUpWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
-              Sign up with Google
+              <a href="http://localhost:9000/oauth2/authorization/google">
+                Login with Google
+              </a>
             </Button>
           </div>
 

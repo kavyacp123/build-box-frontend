@@ -38,7 +38,7 @@ export default function PlaceholderPage({
 
             <div className="flex items-center justify-center gap-2 mt-8 text-sm text-primary">
               <MessageCircle className="w-4 h-4" />
-              <span>Prompt me to build this page</span>
+              {/*<span>Prompt me to build this page</span>*/}
             </div>
           </div>
         </div>

@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/DashboardPages/Projects";
 import NewProject from "./pages/DashboardPages/NewProject";
 import Deployments from "./pages/DashboardPages/Deployments";
+import DeploymentLogs from "./pages/DashboardPages/DeploymentLogs";
 import Domains from "./pages/DashboardPages/Domains";
 import Analytics from "./pages/DashboardPages/Analytics";
 import SettingsPage from "./pages/DashboardPages/Settings";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/dashboard/projects/new" element={<ProtectedRoute><NewProject /></ProtectedRoute>} />
           <Route path="/dashboard/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
           <Route path="/dashboard/deployments" element={<ProtectedRoute><Deployments /></ProtectedRoute>} />
+          <Route path="/dashboard/deployments/:taskId/logs" element={<ProtectedRoute><DeploymentLogs /></ProtectedRoute>} />
           <Route path="/dashboard/domains" element={<ProtectedRoute><Domains /></ProtectedRoute>} />
           <Route path="/dashboard/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
           <Route path="/dashboard/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />

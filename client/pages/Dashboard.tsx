@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
@@ -10,6 +10,10 @@ import {
   AlertCircle,
   Zap,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+/* ------------------ TEMP STATIC DATA (replace later with API) ------------------ */
 
 const projects = [
   {
@@ -85,7 +89,9 @@ const recentDeployments = [
   },
 ];
 
-function getStatusIcon(status: string) {
+/* ------------------ HELPERS ------------------ */
+
+function getStatusIcon(status) {
   switch (status) {
     case "success":
       return <CheckCircle className="w-4 h-4 text-green-500" />;
@@ -98,12 +104,56 @@ function getStatusIcon(status: string) {
   }
 }
 
+/* ------------------ DASHBOARD ------------------ */
+
 export default function Dashboard() {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        console.log("Fetching user details");
+
+        const response = await axios.get("http://localhost:9000/me", {
+          params: {
+            email: localStorage.getItem("email"), // TEMP (will remove later when JWT is added)
+          },
+          withCredentials: true,
+        });
+
+        if (response.status === 200) {
+          setUser(response.data);
+          localStorage.setItem("userId", response.data.id);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Not authenticated", err);
+        navigate("/login");
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
+  /* ------------------ LOADING SCREEN ------------------ */
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-lg font-semibold">Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  /* ------------------ UI ------------------ */
+
   return (
     <div className="flex h-screen bg-background">
       <DashboardSidebar />
 
-      {/* Main content */}
       <div className="flex-1 ml-64 flex flex-col overflow-hidden">
         {/* Top bar */}
         <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
@@ -111,7 +161,7 @@ export default function Dashboard() {
             <div>
               <h1 className="text-2xl font-bold">Dashboard</h1>
               <p className="text-foreground/60 text-sm mt-1">
-                Welcome back! Here's your deployment overview.
+                Welcome back, <b>{user.name}</b> ({user.email})
               </p>
             </div>
             <Link to="/dashboard/projects/new">
@@ -126,139 +176,58 @@ export default function Dashboard() {
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-8 max-w-7xl">
+
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
               <Card className="bg-card p-6 border border-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-foreground/60 text-sm font-medium">
-                      Total Projects
-                    </p>
-                    <p className="text-3xl font-bold mt-1">4</p>
-                  </div>
-                  <Zap className="w-8 h-8 text-primary/50" />
-                </div>
+                <p className="text-sm text-foreground/60">Total Projects</p>
+                <p className="text-3xl font-bold">{projects.length}</p>
               </Card>
+
               <Card className="bg-card p-6 border border-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-foreground/60 text-sm font-medium">
-                      Total Deployments
-                    </p>
-                    <p className="text-3xl font-bold mt-1">62</p>
-                  </div>
-                  <GitBranch className="w-8 h-8 text-primary/50" />
-                </div>
+                <p className="text-sm text-foreground/60">Total Deployments</p>
+                <p className="text-3xl font-bold">62</p>
               </Card>
+
               <Card className="bg-card p-6 border border-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-foreground/60 text-sm font-medium">
-                      Success Rate
-                    </p>
-                    <p className="text-3xl font-bold mt-1">98%</p>
-                  </div>
-                  <CheckCircle className="w-8 h-8 text-green-500/50" />
-                </div>
+                <p className="text-sm text-foreground/60">Success Rate</p>
+                <p className="text-3xl font-bold">98%</p>
               </Card>
+
               <Card className="bg-card p-6 border border-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-foreground/60 text-sm font-medium">
-                      Uptime
-                    </p>
-                    <p className="text-3xl font-bold mt-1">99.9%</p>
-                  </div>
-                  <Clock className="w-8 h-8 text-primary/50" />
-                </div>
+                <p className="text-sm text-foreground/60">Uptime</p>
+                <p className="text-3xl font-bold">99.9%</p>
               </Card>
             </div>
 
-            {/* Projects Section */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold">Your Projects</h2>
-                <a
-                  href="#view-all"
-                  className="text-primary hover:text-primary/80 transition-colors text-sm"
-                >
-                  View all
-                </a>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {projects.map((project) => (
-                  <Card
-                    key={project.id}
-                    className="bg-card p-6 border border-border hover:border-primary/50 transition-colors cursor-pointer"
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="font-semibold">{project.name}</h3>
-                        <p className="text-sm text-foreground/60 mt-1">
-                          {project.url}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {getStatusIcon(project.status)}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm text-foreground/60">
-                      <span>{project.deployments} deployments</span>
-                      <span>{project.lastDeployed}</span>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+            {/* Projects */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {projects.map((project) => (
+                <Card key={project.id} className="p-6 border border-border">
+                  <div className="flex justify-between mb-2">
+                    <h3 className="font-semibold">{project.name}</h3>
+                    {getStatusIcon(project.status)}
+                  </div>
+                  <p className="text-sm text-foreground/60">{project.url}</p>
+                </Card>
+              ))}
             </div>
 
             {/* Recent Deployments */}
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold">Recent Deployments</h2>
-                <a
-                  href="#view-all"
-                  className="text-primary hover:text-primary/80 transition-colors text-sm"
-                >
-                  View timeline
-                </a>
-              </div>
-
-              <Card className="bg-card border border-border overflow-hidden">
-                <div className="divide-y divide-border">
-                  {recentDeployments.map((deployment) => (
-                    <div
-                      key={deployment.id}
-                      className="px-6 py-4 hover:bg-card/50 transition-colors cursor-pointer"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 min-w-fit">
-                          {getStatusIcon(deployment.status)}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <p className="font-semibold truncate">
-                              {deployment.project}
-                            </p>
-                            <span className="text-xs text-foreground/60 bg-card px-2 py-1 rounded">
-                              {deployment.branch}
-                            </span>
-                          </div>
-                          <p className="text-sm text-foreground/60 truncate">
-                            {deployment.commit}
-                          </p>
-                          <p className="text-xs text-foreground/50 mt-1">
-                            by {deployment.author} • {deployment.time}
-                          </p>
-                        </div>
-                      </div>
+            <Card className="border border-border">
+              <div className="divide-y divide-border">
+                {recentDeployments.map((d) => (
+                  <div key={d.id} className="p-4 flex gap-4">
+                    {getStatusIcon(d.status)}
+                    <div>
+                      <p className="font-semibold">{d.project}</p>
+                      <p className="text-sm text-foreground/60">{d.commit}</p>
                     </div>
-                  ))}
-                </div>
-              </Card>
-            </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function Login() {
       if(response.status === 200){
         const {token, name} = response.data;
         localStorage.setItem("token", token);
-        localStorage.setItem("name", name);
+        localStorage.setItem("email", email);
         navigate("/dashboard");
       }
     }catch(e){
@@ -72,18 +72,21 @@ export default function Login() {
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              onClick={handleLoginWithGitHub}
             >
               <Github className="w-4 h-4 mr-2" />
-              Continue with GitHub
+              <a href="http://localhost:9000/oauth2/authorization/github">
+                Login with Google
+              </a>
             </Button>
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              onClick={handleLoginWithGoogle}
+              // onClick={handleLoginWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
-              Continue with Google
+              <a href="http://localhost:9000/oauth2/authorization/google">
+                Login with Google
+              </a>
             </Button>
           </div>
 
