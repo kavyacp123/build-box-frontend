@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import { ArrowLeft, CheckCircle, AlertCircle, Loader2, ExternalLink } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import { stat } from "fs";
 
 interface DeploymentLogsResponse {
   logs: string[];
@@ -45,7 +46,7 @@ export default function DeploymentLogs() {
     setLoading(true);
 
     const eventSource = new EventSource(
-      `http://localhost:9000/deploymentLogs/${taskId}`
+      `http://localhost:9001/api/v2/buildLogs/${taskId}`
     );
 
     eventSource.onmessage = (event) => {
@@ -74,7 +75,7 @@ export default function DeploymentLogs() {
     return () => {
       eventSource.close();
     };
-  }, [taskId]);
+  }, [status === "IN_PROGRESS" || status === "PENDING"]);
 
   const getStatusIcon = () => {
     switch (status) {

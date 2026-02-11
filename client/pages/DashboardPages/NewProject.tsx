@@ -41,7 +41,7 @@ export default function NewProject() {
 
       // Backend returns 202 Accepted with { message: "Deployment started", taskId: "..." }
       if (response.status === 200 || response.status === 202) {
-        const taskId = response.data?.taskId;
+        const taskId = response.data?.buildId;
 
         if (taskId) {
           console.log("Deployment started with taskId:", taskId);
