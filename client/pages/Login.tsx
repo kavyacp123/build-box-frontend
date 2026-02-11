@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Github, Mail } from "lucide-react";
+import { ArrowLeft, Github, Mail, Zap } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 
@@ -12,24 +12,64 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    const demoCreds = {
+      email: "demo@buildbox.app",
+      password: "demouser123"
+    };
+
+    try {
+      // 1. Try to login
+      let response;
+      try {
+        response = await axios.post("http://localhost:9000/auth/login", demoCreds);
+      } catch (e) {
+        // 2. If login fails (assume user doesn't exist), try to signup
+        if (axios.isAxiosError(e) && (e.response?.status === 404 || e.response?.status === 401)) {
+          await axios.post("http://localhost:9000/auth/signup", {
+            name: "Demo User",
+            ...demoCreds,
+            confirmPassword: demoCreds.password
+          });
+          // 3. Login after signup
+          response = await axios.post("http://localhost:9000/auth/login", demoCreds);
+        } else {
+          throw e;
+        }
+      }
+
+      if (response && response.status === 200) {
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("email", demoCreds.email);
+        navigate("/dashboard");
+      }
+    } catch (e) {
+      console.error("Demo login failed", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     // Simulate auth delay
-    if(email === "" || password === "") {
+    if (email === "" || password === "") {
       return;
     }
-    try{
+    try {
       const response = await axios.post("http://localhost:9000/auth/login", { email, password });
-      if(response.status === 200){
-        const {token, name} = response.data;
+      if (response.status === 200) {
+        const { token, name } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("email", email);
         navigate("/dashboard");
       }
-    }catch(e){
+    } catch (e) {
       console.log(e)
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -75,18 +115,31 @@ export default function Login() {
             >
               <Github className="w-4 h-4 mr-2" />
               <a href="http://localhost:9000/oauth2/authorization/github">
-                Login with Google
+                Login with GitHub
               </a>
             </Button>
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              // onClick={handleLoginWithGoogle}
+            // onClick={handleLoginWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
               <a href="http://localhost:9000/oauth2/authorization/google">
                 Login with Google
               </a>
+              <a href="http://localhost:9000/oauth2/authorization/google">
+                Login with Google
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full border-primary/50 text-primary hover:bg-primary/10 hover:text-primary font-bold"
+              onClick={handleDemoLogin}
+              disabled={loading}
+              type="button"
+            >
+              <Zap className="w-4 h-4 mr-2" />
+              Try Demo Account
             </Button>
           </div>
 
@@ -109,7 +162,8 @@ export default function Login() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-input/50 border-border/50 focus:border-primary"
+                autoComplete="email"
+                className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
@@ -126,7 +180,8 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-input/50 border-border/50 focus:border-primary"
+                autoComplete="current-password"
+                className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
 

@@ -33,12 +33,16 @@ export default function NewProject() {
         frontendDirectory: frontendDir,
         backendDirectory: backendDir,
         userId: localStorage.getItem("userId")
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
       });
 
       // Backend returns 202 Accepted with { message: "Deployment started", taskId: "..." }
       if (response.status === 200 || response.status === 202) {
         const taskId = response.data?.taskId;
-        
+
         if (taskId) {
           console.log("Deployment started with taskId:", taskId);
           // Navigate to deployment logs page

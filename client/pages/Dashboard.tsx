@@ -119,9 +119,11 @@ export default function Dashboard() {
 
         const response = await axios.get("http://localhost:9000/me", {
           params: {
-            email: localStorage.getItem("email"), // TEMP (will remove later when JWT is added)
+            email: localStorage.getItem("email"),
           },
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         });
 
         if (response.status === 200) {

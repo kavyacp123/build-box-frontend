@@ -27,41 +27,41 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     // Simulate auth delay
-    if(formData.name === "" || formData.email === "" || formData.password === "" || formData.confirmPassword === "") {
+    if (formData.name === "" || formData.email === "" || formData.password === "" || formData.confirmPassword === "") {
       return;
     }
-    try{
+    try {
       const response = await axios.post("http://localhost:9000/auth/signup", formData);
-      if(response.status === 200){
+      if (response.status === 200) {
         navigate("/login");
         setLoading(false);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
       setLoading(false);
     }
   };
 
   const handleSignUpWithGitHub = async () => {
-    try{
+    try {
       const response = await axios.post("http://localhost:9000/oauth2/authorization/google");
-      if(response.status === 200){
+      if (response.status === 200) {
         navigate("/login");
         setLoading(false);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   };
 
   const handleSignUpWithGoogle = async () => {
-    try{
+    try {
       const response = await axios.post("http://localhost:9000/oauth2/authorization/google");
-      if(response.status === 200){
+      if (response.status === 200) {
         navigate("/login");
         setLoading(false);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   };
@@ -104,21 +104,21 @@ export default function Signup() {
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              // onClick={handleSignUpWithGitHub}
+            // onClick={handleSignUpWithGitHub}
             >
               <Github className="w-4 h-4 mr-2" />
               <a href="http://localhost:9000/oauth2/authorization/github">
-                Login with Google
+                Sign up with GitHub
               </a>
             </Button>
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-              // onClick={handleSignUpWithGoogle}
+            // onClick={handleSignUpWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
               <a href="http://localhost:9000/oauth2/authorization/google">
-                Login with Google
+                Sign up with Google
               </a>
             </Button>
           </div>
@@ -143,7 +143,8 @@ export default function Signup() {
                 placeholder="John Doe"
                 value={formData.name}
                 onChange={handleChange}
-                className="bg-input/50 border-border/50 focus:border-primary"
+                autoComplete="name"
+                className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
@@ -158,7 +159,8 @@ export default function Signup() {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="bg-input/50 border-border/50 focus:border-primary"
+                autoComplete="email"
+                className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
@@ -176,7 +178,8 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
-                className="bg-input/50 border-border/50 focus:border-primary"
+                autocomplete="new-password"
+                className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
@@ -194,7 +197,8 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="bg-input/50 border-border/50 focus:border-primary"
+                autocomplete="new-password"
+                className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
