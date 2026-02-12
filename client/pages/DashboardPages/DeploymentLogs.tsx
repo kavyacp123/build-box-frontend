@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import { ArrowLeft, CheckCircle, AlertCircle, Loader2, ExternalLink } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import { stat } from "fs";
 
 interface DeploymentLogsResponse {
   logs: string[];
@@ -46,12 +45,14 @@ export default function DeploymentLogs() {
     setLoading(true);
 
     const eventSource = new EventSource(
-      `http://localhost:9001/api/v2/buildLogs/${taskId}`
+      `http://localhost:9001/api/v2/buildLogs/${taskId}/logs`
     );
 
-    eventSource.onmessage = (event) => {
+    const handleMessage = (event: MessageEvent) => {
+      const raw = typeof event.data === "string" ? event.data : "";
+
       try {
-        const data: DeploymentLogsResponse = JSON.parse(event.data);
+        const data: DeploymentLogsResponse = JSON.parse(raw);
 
         setLogs(data.logs || []);
         setStatus(data.status);
@@ -60,10 +61,34 @@ export default function DeploymentLogs() {
         if (data.status === "SUCCESS" || data.status === "FAILED") {
           eventSource.close();
         }
+        return;
       } catch (err) {
-        console.error("Failed to parse SSE data", err);
+        const trimmed = raw.trim();
+        if (!trimmed) {
+          return;
+        }
+
+        setLogs((prev) => [...prev, trimmed]);
+        setLoading(false);
+
+        if (trimmed.includes("__BUILD_STATUS__:SUCCESS")) {
+          setStatus("SUCCESS");
+          eventSource.close();
+          return;
+        }
+
+        if (trimmed.includes("__BUILD_STATUS__:FAILED")) {
+          setStatus("FAILED");
+          eventSource.close();
+          return;
+        }
+
+        console.warn("SSE payload is not JSON, treated as log line.", err);
       }
     };
+
+    eventSource.addEventListener("log", handleMessage as EventListener);
+    eventSource.onmessage = handleMessage;
 
     eventSource.onerror = (err) => {
       console.error("SSE error", err);
@@ -73,9 +98,10 @@ export default function DeploymentLogs() {
     };
 
     return () => {
+      eventSource.removeEventListener("log", handleMessage as EventListener);
       eventSource.close();
     };
-  }, [status === "IN_PROGRESS" || status === "PENDING"]);
+  }, [taskId]);
 
   const getStatusIcon = () => {
     switch (status) {
@@ -149,7 +175,7 @@ export default function DeploymentLogs() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-hidden">
           <div className="p-8">
             <Card className="bg-card border border-border">
               <div className="p-6">
@@ -169,15 +195,32 @@ export default function DeploymentLogs() {
                 )}
 
                 {logs.length > 0 && (
-                  <div className="bg-black/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                    <div className="space-y-1">
-                      {logs.map((log, index) => (
-                        <div key={index} className="text-foreground/90 whitespace-pre-wrap break-words">
-                          {log}
-                        </div>
-                      ))}
+                  <div className="rounded-xl border border-border/60 bg-gradient-to-b from-black/70 to-black/50 shadow-lg overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/30">
+                      <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-foreground/70">
+                        <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                        Live stream
+                      </div>
+                      <div className="text-xs text-foreground/60">
+                        {logs.length} lines
+                      </div>
                     </div>
-                    <div ref={logsEndRef} />
+                    <div className="max-h-[60vh] overflow-y-auto overflow-x-auto p-4 font-mono text-sm">
+                      <div className="space-y-1">
+                        {logs.map((log, index) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-[3rem_1fr] gap-3 px-2 py-1 rounded-md text-foreground/90 whitespace-pre-wrap break-words hover:bg-white/5"
+                          >
+                            <span className="text-foreground/40 text-right select-none">
+                              {index + 1}
+                            </span>
+                            <span>{log}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div ref={logsEndRef} />
+                    </div>
                   </div>
                 )}
 
