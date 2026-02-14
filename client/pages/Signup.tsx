@@ -25,44 +25,23 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    // Simulate auth delay
-    if (formData.name === "" || formData.email === "" || formData.password === "" || formData.confirmPassword === "") {
+    if (!formData.name || !formData.email || !formData.password || formData.password !== formData.confirmPassword) {
+      alert("Please fill all fields and ensure passwords match.");
       return;
     }
+
+    setLoading(true);
     try {
-      const response = await axios.post("http://localhost:9000/auth/signup", formData);
-      if (response.status === 200) {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const response = await axios.post(`${apiUrl}/auth/signup`, formData);
+      if (response.status === 200 || response.status === 201) {
         navigate("/login");
-        setLoading(false);
       }
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.error("Signup failed", err);
+      alert(err.response?.data?.error || "Registration failed. Email might be in use.");
+    } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSignUpWithGitHub = async () => {
-    try {
-      const response = await axios.post("http://localhost:9000/oauth2/authorization/google");
-      if (response.status === 200) {
-        navigate("/login");
-        setLoading(false);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleSignUpWithGoogle = async () => {
-    try {
-      const response = await axios.post("http://localhost:9000/oauth2/authorization/google");
-      if (response.status === 200) {
-        navigate("/login");
-        setLoading(false);
-      }
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -104,20 +83,18 @@ export default function Signup() {
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-            // onClick={handleSignUpWithGitHub}
             >
               <Github className="w-4 h-4 mr-2" />
-              <a href="http://localhost:9000/oauth2/authorization/github">
+              <a href="http://localhost:8000/api/auth/oauth2/authorization/github">
                 Sign up with GitHub
               </a>
             </Button>
             <Button
               variant="outline"
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
-            // onClick={handleSignUpWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
-              <a href="http://localhost:9000/oauth2/authorization/google">
+              <a href="http://localhost:8000/api/auth/oauth2/authorization/google">
                 Sign up with Google
               </a>
             </Button>
@@ -178,7 +155,7 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
-                autocomplete="new-password"
+                autoComplete="new-password"
                 className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
@@ -197,29 +174,9 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                autocomplete="new-password"
+                autoComplete="new-password"
                 className="bg-input/50 border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
-            </div>
-
-            <div className="flex items-start gap-2 text-sm">
-              <input type="checkbox" className="w-4 h-4 rounded mt-1" />
-              <span className="text-foreground/60">
-                I agree to the{" "}
-                <a
-                  href="#terms"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  Terms of Service
-                </a>{" "}
-                and{" "}
-                <a
-                  href="#privacy"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  Privacy Policy
-                </a>
-              </span>
             </div>
 
             <Button

@@ -12,15 +12,14 @@ export default function NewProject() {
 
   const [projectName, setProjectName] = useState("");
   const [repository, setRepository] = useState("");
-  const [frontendDir, setFrontendDir] = useState("");
-  const [backendDir, setBackendDir] = useState("");
+  const [basePath, setBasePath] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!projectName || !repository || !frontendDir || !backendDir) {
-      alert("Please fill all fields");
+    if (!projectName || !repository) {
+      alert("Project name and repository are required");
       return;
     }
 
@@ -28,35 +27,37 @@ export default function NewProject() {
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-      const response = await axios.post(`${apiUrl}/deployments`, {
-        projectName: projectName,
-        link: repository,
-        frontendDirectory: frontendDir,
-        backendDirectory: backendDir,
-        userId: localStorage.getItem("userId")
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
 
-      // Backend returns 202 Accepted with { message: "Deployment started", taskId: "..." }
-      if (response.status === 200 || response.status === 202) {
-        const taskId = response.data?.buildId;
+      // 1. Create Project metadata
+      const projectResponse = await axios.post(`${apiUrl}/projects`, {
+        name: projectName,
+        repoUrl: repository,
+        basePath: basePath
+      }, { headers });
 
-        if (taskId) {
-          console.log("Deployment started with taskId:", taskId);
-          // Navigate to deployment logs page
-          navigate(`/dashboard/deployments/${taskId}/logs?project=${projectName}`);
-        } else {
-          console.error("No taskId in response:", response.data);
-          alert("Deployment started but task ID not found. Check dashboard for updates.");
-          navigate("/dashboard");
-        }
+      const project = projectResponse.data;
+      console.log("Project created:", project);
+
+      // 2. Trigger initial Deployment
+      const deployResponse = await axios.post(`${apiUrl}/projects/${project.slug}/deployments`, {
+        branch: "main",
+        commitMessage: "Initial Deployment"
+      }, { headers });
+
+      const deployment = deployResponse.data;
+      console.log("Deployment triggered:", deployment);
+
+      if (deployment.taskId) {
+        navigate(`/dashboard/deployments/${deployment.taskId}/logs?project=${projectName}`);
+      } else {
+        alert("Project created and deployment triggered. Redirecting to dashboard.");
+        navigate("/dashboard");
       }
     } catch (err) {
-      console.error("Deployment failed", err);
-      alert("Deployment failed. Check console.");
+      console.error("Project creation failed", err);
+      alert(err.response?.data?.error || "Failed to create project. Check console.");
     } finally {
       setLoading(false);
     }
@@ -106,18 +107,11 @@ export default function NewProject() {
                   onChange={(e) => setRepository(e.target.value)}
                 />
 
-                {/* Frontend Dir */}
+                {/* Application Path */}
                 <Input
-                  placeholder="Frontend directory (e.g. frontend or client)"
-                  value={frontendDir}
-                  onChange={(e) => setFrontendDir(e.target.value)}
-                />
-
-                {/* Backend Dir */}
-                <Input
-                  placeholder="Backend directory (e.g. backend or server)"
-                  value={backendDir}
-                  onChange={(e) => setBackendDir(e.target.value)}
+                  placeholder="Application Path (e.g. / or backend)"
+                  value={basePath}
+                  onChange={(e) => setBasePath(e.target.value)}
                 />
 
                 {/* Buttons */}

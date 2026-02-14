@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
-import { Boxes, Plus, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { Boxes, Plus, CheckCircle, Clock, AlertCircle, Trash2 } from "lucide-react";
 
 const getStatusIcon = (status) => {
   switch (status?.toLowerCase()) {
@@ -19,22 +19,37 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchProjects = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const response = await axios.get(`${apiUrl}/projects`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      setProjects(response.data);
+    } catch (err) {
+      console.error("Failed to fetch projects", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-        const response = await axios.get(`${apiUrl}/projects`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
-        setProjects(response.data);
-      } catch (err) {
-        console.error("Failed to fetch projects", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProjects();
   }, []);
+
+  const handleDeleteProject = async (slug) => {
+    if (!confirm("Are you sure you want to delete this project? Statistics and deployment history will be lost.")) return;
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      await axios.delete(`${apiUrl}/projects/${slug}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      fetchProjects();
+    } catch (err) {
+      console.error("Failed to delete project", err);
+      alert("Failed to delete project.");
+    }
+  };
 
   return (
     <div className="flex h-screen bg-background">
@@ -67,6 +82,14 @@ export default function Projects() {
                     <Link to={`/dashboard/projects/${p.slug}`} className="flex-1">
                       <Button variant="outline" className="w-full">View Details</Button>
                     </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-foreground/40 hover:text-red-500 transition-colors"
+                      onClick={() => handleDeleteProject(p.slug)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </Card>
               ))}
