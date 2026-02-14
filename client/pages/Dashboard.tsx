@@ -112,32 +112,36 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
+  const [projects, setProjects] = useState([]);
+
   useEffect(() => {
-    const fetchUserDetails = async () => {
+    const fetchDashboardData = async () => {
       try {
-        console.log("Fetching user details");
+        console.log("Fetching dashboard data");
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+        const token = localStorage.getItem("token");
 
-        const response = await axios.get("http://localhost:9000/me", {
-          params: {
-            email: localStorage.getItem("email"),
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
+        // 1. Fetch User Details
+        const userResponse = await axios.get(`${apiUrl}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` }
         });
+        setUser(userResponse.data);
+        localStorage.setItem("userId", userResponse.data.id);
 
-        if (response.status === 200) {
-          setUser(response.data);
-          localStorage.setItem("userId", response.data.id);
-          setLoading(false);
-        }
+        // 2. Fetch Projects
+        const projectsResponse = await axios.get(`${apiUrl}/projects`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setProjects(projectsResponse.data);
+
+        setLoading(false);
       } catch (err) {
-        console.error("Not authenticated", err);
+        console.error("Dashboard data fetch failed", err);
         navigate("/login");
       }
     };
 
-    fetchUserDetails();
+    fetchDashboardData();
   }, []);
 
   /* ------------------ LOADING SCREEN ------------------ */

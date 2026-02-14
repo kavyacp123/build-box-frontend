@@ -27,7 +27,8 @@ export default function NewProject() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:9000/deployProject/v2", {
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const response = await axios.post(`${apiUrl}/deployments`, {
         projectName: projectName,
         link: repository,
         frontendDirectory: frontendDir,

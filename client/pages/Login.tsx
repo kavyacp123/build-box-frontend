@@ -19,21 +19,22 @@ export default function Login() {
       password: "demouser123"
     };
 
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+    // 1. Try to login
     try {
-      // 1. Try to login
       let response;
       try {
-        response = await axios.post("http://localhost:9000/auth/login", demoCreds);
+        response = await axios.post(`${apiUrl}/auth/login`, demoCreds);
       } catch (e) {
         // 2. If login fails (assume user doesn't exist), try to signup
         if (axios.isAxiosError(e) && (e.response?.status === 404 || e.response?.status === 401)) {
-          await axios.post("http://localhost:9000/auth/signup", {
+          await axios.post(`${apiUrl}/auth/signup`, {
             name: "Demo User",
             ...demoCreds,
             confirmPassword: demoCreds.password
           });
           // 3. Login after signup
-          response = await axios.post("http://localhost:9000/auth/login", demoCreds);
+          response = await axios.post(`${apiUrl}/auth/login`, demoCreds);
         } else {
           throw e;
         }
@@ -60,7 +61,8 @@ export default function Login() {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:9000/auth/login", { email, password });
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
       if (response.status === 200) {
         const { token, name } = response.data;
         localStorage.setItem("token", token);
@@ -114,7 +116,7 @@ export default function Login() {
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
             >
               <Github className="w-4 h-4 mr-2" />
-              <a href="http://localhost:9000/oauth2/authorization/github">
+              <a href="http://localhost:8000/api/oauth2/authorization/github">
                 Login with GitHub
               </a>
             </Button>
@@ -124,10 +126,7 @@ export default function Login() {
             // onClick={handleLoginWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
-              <a href="http://localhost:9000/oauth2/authorization/google">
-                Login with Google
-              </a>
-              <a href="http://localhost:9000/oauth2/authorization/google">
+              <a href="http://localhost:8000/api/oauth2/authorization/google">
                 Login with Google
               </a>
             </Button>
