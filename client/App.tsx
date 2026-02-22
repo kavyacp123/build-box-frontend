@@ -12,8 +12,10 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/DashboardPages/Projects";
 import NewProject from "./pages/DashboardPages/NewProject";
+import ProjectDetail from "./pages/DashboardPages/ProjectDetail";
 import Deployments from "./pages/DashboardPages/Deployments";
 import DeploymentLogs from "./pages/DashboardPages/DeploymentLogs";
+import BackendLogs from "./pages/DashboardPages/BackendLogs";
 import Domains from "./pages/DashboardPages/Domains";
 import Analytics from "./pages/DashboardPages/Analytics";
 import SettingsPage from "./pages/DashboardPages/Settings";
@@ -34,6 +36,8 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/dashboard/projects/new" element={<ProtectedRoute><NewProject /></ProtectedRoute>} />
+          <Route path="/dashboard/projects/:slug" element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>} />
+          <Route path="/dashboard/projects/:slug/logs" element={<ProtectedRoute><BackendLogs /></ProtectedRoute>} />
           <Route path="/dashboard/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
           <Route path="/dashboard/deployments" element={<ProtectedRoute><Deployments /></ProtectedRoute>} />
           <Route path="/dashboard/deployments/:taskId/logs" element={<ProtectedRoute><DeploymentLogs /></ProtectedRoute>} />

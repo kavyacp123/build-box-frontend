@@ -25,10 +25,6 @@ export default function DashboardSidebar() {
   
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-  });
   
   const handleSignOut = () => {
     console.log("Signing out");
@@ -78,12 +74,6 @@ export default function DashboardSidebar() {
 
       {/* User section */}
       <div className="border-t border-sidebar-border p-4 space-y-3">
-        <div className="px-4 py-3 bg-sidebar-accent rounded-lg">
-          <p className="font-semibold text-sm text-sidebar-foreground">
-            {user.name}
-          </p>
-          <p className="text-xs text-sidebar-foreground/60">{user.email}</p>
-        </div>
         <Button
           variant="ghost"
           className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent"

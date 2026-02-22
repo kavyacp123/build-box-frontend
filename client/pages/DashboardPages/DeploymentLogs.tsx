@@ -44,9 +44,8 @@ export default function DeploymentLogs() {
 
     setLoading(true);
 
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
     const eventSource = new EventSource(
-      `${apiUrl}/v2/buildLogs/${taskId}/logs`
+      `http://localhost:9001/api/v2/buildLogs/${taskId}/logs`
     );
 
     const handleMessage = (event: MessageEvent) => {

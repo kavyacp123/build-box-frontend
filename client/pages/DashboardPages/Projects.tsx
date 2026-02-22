@@ -21,7 +21,7 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
       const response = await axios.get(`${apiUrl}/projects`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
@@ -40,7 +40,8 @@ export default function Projects() {
   const handleDeleteProject = async (slug) => {
     if (!confirm("Are you sure you want to delete this project? Statistics and deployment history will be lost.")) return;
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
+      console.log(apiUrl);
       await axios.delete(`${apiUrl}/projects/${slug}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
