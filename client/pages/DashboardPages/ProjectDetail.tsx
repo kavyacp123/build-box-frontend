@@ -223,7 +223,7 @@ export default function ProjectDetail() {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => navigate(`/dashboard/projects/${project.slug}/logs`)}
+                onClick={() => navigate(`/dashboard/projects/${project.name}/logs`)}
               >
                 <Terminal className="w-4 h-4 mr-2" />
                 View Backend Logs

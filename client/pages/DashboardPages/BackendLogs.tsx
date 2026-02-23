@@ -4,18 +4,23 @@ import { Card } from "@/components/ui/card";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import { ArrowLeft, Terminal, RefreshCw, AlertCircle } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+
+type RuntimeLogEntry = {
+  source: string;
+  message: string;
+};
 
 export default function BackendLogs() {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
 
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<RuntimeLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(true);
 
   const logsEndRef = useRef<HTMLDivElement>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
 
   const scrollToBottom = () => {
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -25,50 +30,90 @@ export default function BackendLogs() {
     scrollToBottom();
   }, [logs]);
 
-  const fetchLogs = async () => {
+  const closeStream = () => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+  };
+
+  const appendLog = (data: string) => {
+    if (!data) {
+      return;
+    }
+
+    console.log("Received log data:", data);
+
+    const separatorIndex = data.indexOf("|");
+    const source = separatorIndex >= 0 ? data.slice(0, separatorIndex) : "runtime";
+    const message = separatorIndex >= 0 ? data.slice(separatorIndex + 1) : data;
+
+    if (source === "heartbeat") {
+      return;
+    }
+
+    setLogs((prev) => [...prev, { source, message }]);
+    setLoading(false);
+  };
+
+  const openStream = (resetLogs: boolean) => {
     if (!slug) {
       setError("No project slug provided");
       setLoading(false);
       return;
     }
 
-    try {
-      const buildServerUrl = import.meta.env.VITE_BUILD_SERVER_URL || "http://localhost:9191";
-      const response = await axios.get<string[]>(`${buildServerUrl}/api/builds/tasks/${slug}/logs`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      
-      setLogs(response.data || []);
-      setError(null);
-    } catch (err: any) {
-      console.error("Failed to fetch logs", err);
-      if (err.response?.status === 404) {
-        setError("No backend task found for this project. The project may not be deployed yet.");
-      } else {
-        setError("Failed to load backend logs. Please try again.");
-      }
-    } finally {
-      setLoading(false);
+    closeStream();
+    if (resetLogs) {
+      setLogs([]);
     }
+
+    setLoading(true);
+    setError(null);
+
+    const runtimeApiUrl = import.meta.env.VITE_RUNTIME_LOGS_URL || "http://localhost:9001";
+    const streamUrl = `${runtimeApiUrl}/api/v2/runtime/${slug}/logs`;
+    const eventSource = new EventSource(streamUrl);
+    eventSourceRef.current = eventSource;
+
+    eventSource.addEventListener("log", (event) => {
+      const data = typeof event.data === "string" ? event.data : "";
+      appendLog(data);
+    });
+
+    eventSource.addEventListener("system", (event) => {
+      const data = typeof event.data === "string" ? event.data : "";
+      appendLog(data);
+    });
+
+    eventSource.addEventListener("heartbeat", () => {
+      setLoading(false);
+    });
+
+    eventSource.onerror = (err) => {
+      console.error("SSE error", err);
+      setError("Lost connection to runtime log stream.");
+      setLoading(false);
+      closeStream();
+    };
   };
 
   useEffect(() => {
-    fetchLogs();
-  }, [slug]);
+    if (!autoRefresh) {
+      closeStream();
+      return undefined;
+    }
 
-  useEffect(() => {
-    if (!autoRefresh) return;
+    openStream(true);
 
-    const interval = setInterval(() => {
-      fetchLogs();
-    }, 5000); // Refresh every 5 seconds
-
-    return () => clearInterval(interval);
+    return () => closeStream();
   }, [autoRefresh, slug]);
 
   const handleRefresh = () => {
-    setLoading(true);
-    fetchLogs();
+    if (!autoRefresh) {
+      setAutoRefresh(true);
+    }
+    openStream(true);
   };
 
   return (
@@ -100,7 +145,7 @@ export default function BackendLogs() {
                 size="sm"
                 onClick={() => setAutoRefresh(!autoRefresh)}
               >
-                {autoRefresh ? "Auto-refresh ON" : "Auto-refresh OFF"}
+                {autoRefresh ? "Live stream ON" : "Live stream OFF"}
               </Button>
               <Button
                 variant="outline"
@@ -147,11 +192,11 @@ export default function BackendLogs() {
                       <div
                         key={index}
                         className={`${
-                          log.toLowerCase().includes("error")
+                              log.message.toLowerCase().includes("error")
                             ? "text-red-400"
-                            : log.toLowerCase().includes("warn")
+                                : log.message.toLowerCase().includes("warn")
                             ? "text-yellow-400"
-                            : log.toLowerCase().includes("success") || log.toLowerCase().includes("✓")
+                                : log.message.toLowerCase().includes("success") || log.message.toLowerCase().includes("✓")
                             ? "text-green-400"
                             : "text-slate-300"
                         }`}
@@ -159,7 +204,8 @@ export default function BackendLogs() {
                         <span className="text-slate-500 mr-2 select-none">
                           {String(index + 1).padStart(4, "0")}
                         </span>
-                        {log}
+                            <span className="text-slate-500 mr-2 uppercase">[{log.source}]</span>
+                            {log.message}
                       </div>
                     ))}
                     <div ref={logsEndRef} />
@@ -167,12 +213,12 @@ export default function BackendLogs() {
                 )}
               </div>
             )}
-            {autoRefresh && !error && (
-              <div className="border-t border-border p-3 text-sm text-foreground/60 flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                Auto-refreshing every 5 seconds...
-              </div>
-            )}
+                {autoRefresh && !error && (
+                  <div className="border-t border-border p-3 text-sm text-foreground/60 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    Live streaming runtime logs...
+                  </div>
+                )}
           </Card>
         </div>
       </div>
