@@ -32,7 +32,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
       const response = await axios.post(`${apiUrl}/auth/signup`, formData);
       if (response.status === 200 || response.status === 201) {
         navigate("/login");
@@ -85,7 +85,7 @@ export default function Signup() {
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
             >
               <Github className="w-4 h-4 mr-2" />
-              <a href="http://localhost:8000/api/auth/oauth2/authorization/github">
+              <a href="http://localhost:9000/api/auth/oauth2/authorization/github">
                 Sign up with GitHub
               </a>
             </Button>
@@ -94,7 +94,7 @@ export default function Signup() {
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
             >
               <Mail className="w-4 h-4 mr-2" />
-              <a href="http://localhost:8000/api/auth/oauth2/authorization/google">
+              <a href="http://localhost:9000/api/auth/oauth2/authorization/google">
                 Sign up with Google
               </a>
             </Button>

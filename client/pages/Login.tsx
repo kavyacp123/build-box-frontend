@@ -19,7 +19,7 @@ export default function Login() {
       password: "demouser123"
     };
 
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
     // 1. Try to login
     try {
       let response;
@@ -61,7 +61,7 @@ export default function Login() {
       return;
     }
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
       const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
       if (response.status === 200) {
         const { token, name } = response.data;
@@ -116,7 +116,7 @@ export default function Login() {
               className="w-full border-border/50 hover:border-primary/50 hover:bg-primary/5"
             >
               <Github className="w-4 h-4 mr-2" />
-              <a href="http://localhost:8000/api/oauth2/authorization/github">
+              <a href="http://localhost:9000/api/oauth2/authorization/github">
                 Login with GitHub
               </a>
             </Button>
@@ -126,7 +126,7 @@ export default function Login() {
             // onClick={handleLoginWithGoogle}
             >
               <Mail className="w-4 h-4 mr-2" />
-              <a href="http://localhost:8000/api/oauth2/authorization/google">
+              <a href="http://localhost:9000/api/oauth2/authorization/google">
                 Login with Google
               </a>
             </Button>

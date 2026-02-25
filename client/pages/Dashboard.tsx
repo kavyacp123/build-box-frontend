@@ -42,7 +42,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
         const token = localStorage.getItem("token");
         const headers = { Authorization: `Bearer ${token}` };
 
@@ -50,6 +50,7 @@ export default function Dashboard() {
         const userRes = await axios.get(`${apiUrl}/auth/me`, { headers });
         setUser(userRes.data);
         localStorage.setItem("userId", userRes.data.id);
+        localStorage.setItem("accountId", userRes.data.id); // Store as accountId for analytics
 
         // 2. Fetch Projects & Recent Deployments
         const [projRes, depRes] = await Promise.all([

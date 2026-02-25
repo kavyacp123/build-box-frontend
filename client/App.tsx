@@ -16,6 +16,7 @@ import ProjectDetail from "./pages/DashboardPages/ProjectDetail";
 import Deployments from "./pages/DashboardPages/Deployments";
 import DeploymentLogs from "./pages/DashboardPages/DeploymentLogs";
 import BackendLogs from "./pages/DashboardPages/BackendLogs";
+import AccountAnalytics from "./pages/DashboardPages/AccountAnalytics";
 import Domains from "./pages/DashboardPages/Domains";
 import Analytics from "./pages/DashboardPages/Analytics";
 import SettingsPage from "./pages/DashboardPages/Settings";
@@ -42,7 +43,7 @@ const App = () => (
           <Route path="/dashboard/deployments" element={<ProtectedRoute><Deployments /></ProtectedRoute>} />
           <Route path="/dashboard/deployments/:taskId/logs" element={<ProtectedRoute><DeploymentLogs /></ProtectedRoute>} />
           <Route path="/dashboard/domains" element={<ProtectedRoute><Domains /></ProtectedRoute>} />
-          <Route path="/dashboard/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+          <Route path="/dashboard/analytics" element={<ProtectedRoute><AccountAnalytics /></ProtectedRoute>} />
           <Route path="/dashboard/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

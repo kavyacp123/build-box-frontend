@@ -13,7 +13,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+        const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
         const response = await axios.get(`${apiUrl}/auth/me`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });

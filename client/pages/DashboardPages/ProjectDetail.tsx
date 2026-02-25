@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import DashboardSidebar from "@/components/DashboardSidebar";
+import { ProjectAnalytics } from "@/components/ProjectAnalytics";
 
 interface ProjectDetail {
   id: number;
@@ -205,7 +206,7 @@ export default function ProjectDetail() {
             </Card>
 
             {/* Actions */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 mb-8">
               <Button
                 onClick={() => window.open(project.deploy_url, "_blank")}
                 disabled={!project.deploy_url}
@@ -229,6 +230,11 @@ export default function ProjectDetail() {
                 View Backend Logs
               </Button>
             </div>
+
+            {/* Project Analytics */}
+            <Card className="p-6">
+              <ProjectAnalytics projectSlug={project.name} />
+            </Card>
           </div>
         </div>
       </div>
