@@ -3,6 +3,7 @@ import { Activity, Users, AlertCircle, Clock, Download, Upload } from 'lucide-re
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DashboardSidebar from '@/components/DashboardSidebar';
 import axios from 'axios';
+import { TimeSeriesChart } from '@/components/TimeSeriesChart';
 
 interface AnalyticsData {
   totalRequests: number;
@@ -167,6 +168,9 @@ export default function AccountAnalytics() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Time-Series Chart */}
+      <TimeSeriesChart accountId={localStorage.getItem('accountId') || localStorage.getItem('userId') || 'default'} days={days} interval="day" />
 
       {/* Data Transfer Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

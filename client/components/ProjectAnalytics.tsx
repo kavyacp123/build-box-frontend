@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Activity, Users, AlertCircle, Clock, Download, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import axios from 'axios';
+import { TimeSeriesChart } from './TimeSeriesChart';
 
 interface ProjectAnalyticsData {
   totalRequests: number;
@@ -159,6 +160,9 @@ export function ProjectAnalytics({ projectSlug }: ProjectAnalyticsProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Time-Series Chart */}
+      <TimeSeriesChart projectSlug={projectSlug} days={days} interval={days > 7 ? 'day' : 'day'} />
 
       {/* Traffic Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
