@@ -31,7 +31,7 @@ export default function NewProject() {
       const projectPayload = {
         name: projectName,
         repoUrl: repository,
-        basePath: frontendDir || "."
+        basePath: backendDir || "Backend"
       };
 
       const projectRes = await axios.post("http://localhost:9000/api/projects", projectPayload, {
