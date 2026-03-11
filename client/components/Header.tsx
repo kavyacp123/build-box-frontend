@@ -34,12 +34,7 @@ export default function Header() {
             >
               Features
             </a>
-            <a
-              href="#pricing"
-              className="text-foreground/70 hover:text-foreground transition-colors text-sm"
-            >
-              Pricing
-            </a>
+
             <a
               href="#docs"
               className="text-foreground/70 hover:text-foreground transition-colors text-sm"
@@ -89,12 +84,7 @@ export default function Header() {
             >
               Features
             </a>
-            <a
-              href="#pricing"
-              className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2"
-            >
-              Pricing
-            </a>
+
             <a
               href="#docs"
               className="block text-foreground/70 hover:text-foreground transition-colors text-sm py-2"

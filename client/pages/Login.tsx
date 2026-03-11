@@ -41,9 +41,11 @@ export default function Login() {
       }
 
       if (response && response.status === 200) {
-        const { token } = response.data;
+        const { token, id } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("email", demoCreds.email);
+        localStorage.setItem("userId", id);
+        localStorage.setItem("accountId", id); 
         navigate("/dashboard");
       }
     } catch (e) {
@@ -64,9 +66,11 @@ export default function Login() {
       const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:9000/api";
       const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
       if (response.status === 200) {
-        const { token, name } = response.data;
+        const { token, name, id } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("email", email);
+        localStorage.setItem("userId", id);
+        localStorage.setItem("accountId", id); 
         navigate("/dashboard");
       }
     } catch (e) {

@@ -19,8 +19,8 @@ export default function NewProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!projectName || !repository || !frontendDir || !backendDir) {
-      alert("Please fill all fields");
+    if (!projectName || !repository) {
+      alert("Please enter both Project Name and Repository URL");
       return;
     }
 
@@ -30,8 +30,9 @@ export default function NewProject() {
       const response = await axios.post("http://localhost:9000/deployProject/v2", {
         projectName: projectName,
         link: repository,
-        frontendDirectory: frontendDir,
-        backendDirectory: backendDir,
+        // Default to root directory if not provided
+        frontendDirectory: frontendDir || ".",
+        backendDirectory: backendDir || ".",
         userId: localStorage.getItem("userId")
       }, {
         headers: {
@@ -107,14 +108,14 @@ export default function NewProject() {
 
                 {/* Frontend Dir */}
                 <Input
-                  placeholder="Frontend directory (e.g. frontend or client)"
+                  placeholder="Frontend directory (Optional, e.g. frontend or client)"
                   value={frontendDir}
                   onChange={(e) => setFrontendDir(e.target.value)}
                 />
 
                 {/* Backend Dir */}
                 <Input
-                  placeholder="Backend directory (e.g. backend or server)"
+                  placeholder="Backend directory (Optional, e.g. backend or server)"
                   value={backendDir}
                   onChange={(e) => setBackendDir(e.target.value)}
                 />
