@@ -27,29 +27,39 @@ export default function NewProject() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:9000/deployProject/v2", {
-        projectName: projectName,
-        link: repository,
-        // Default to root directory if not provided
-        frontendDirectory: frontendDir || ".",
-        backendDirectory: backendDir || ".",
-        userId: localStorage.getItem("userId")
-      }, {
+      // 1. Create or ensure project exists
+      const projectPayload = {
+        name: projectName,
+        repoUrl: repository,
+        basePath: frontendDir || "."
+      };
+
+      const projectRes = await axios.post("http://localhost:9000/api/projects", projectPayload, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      
+      const slug = projectRes.data?.slug || projectName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+      // 2. Trigger local deployment via BuildServer correctly
+      const deployRes = await axios.post(`http://localhost:9000/api/projects/${slug}/deployments`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
 
-      // Backend returns 202 Accepted with { message: "Deployment started", taskId: "..." }
-      if (response.status === 200 || response.status === 202) {
-        const taskId = response.data?.buildId;
+      if (deployRes.status === 200 || deployRes.status === 202) {
+        // The /deployments endpoint returns the Deployment entity
+        const deploymentId = deployRes.data?.id;
 
-        if (taskId) {
-          console.log("Deployment started with taskId:", taskId);
+        if (deploymentId) {
+          console.log("Deployment started with ID:", deploymentId);
           // Navigate to deployment logs page
-          navigate(`/dashboard/deployments/${taskId}/logs?project=${projectName}`);
+          // Make sure this matches the correct route format! Using existing format with 'project' param
+          navigate(`/dashboard/deployments/${deploymentId}/logs?project=${slug}`);
         } else {
-          console.error("No taskId in response:", response.data);
+          console.error("No deployment ID in response:", deployRes.data);
           alert("Deployment started but task ID not found. Check dashboard for updates.");
           navigate("/dashboard");
         }
