@@ -7,6 +7,11 @@ import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 
+type EnvVar = {
+  name: string;
+  value: string;
+};
+
 export default function NewProject() {
   const navigate = useNavigate();
 
@@ -14,7 +19,61 @@ export default function NewProject() {
   const [repository, setRepository] = useState("");
   const [frontendDir, setFrontendDir] = useState("");
   const [backendDir, setBackendDir] = useState("");
+  const [frontendEnvVars, setFrontendEnvVars] = useState<EnvVar[]>([{ name: "", value: "" }]);
+  const [backendEnvVars, setBackendEnvVars] = useState<EnvVar[]>([{ name: "", value: "" }]);
   const [loading, setLoading] = useState(false);
+
+  const userId = localStorage.getItem("userId") || "your-user-id";
+  const trimmedProjectName = projectName.trim();
+  const generatedFrontendUrl = trimmedProjectName
+    ? `https://buildbox-frontend.s3.ap-south-1.amazonaws.com/${userId}/${trimmedProjectName}/Frontend/index.html`
+    : "";
+  const generatedBackendUrl = trimmedProjectName
+    ? `api.${trimmedProjectName}.localhost:8000`
+    : "";
+
+  const copyToClipboard = async (value: string) => {
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      alert("Copied to clipboard");
+    } catch {
+      alert("Could not copy automatically. Please copy manually.");
+    }
+  };
+
+  const addEnvRow = (type: "FRONTEND" | "BACKEND") => {
+    if (type === "FRONTEND") {
+      setFrontendEnvVars((prev) => [...prev, { name: "", value: "" }]);
+      return;
+    }
+    setBackendEnvVars((prev) => [...prev, { name: "", value: "" }]);
+  };
+
+  const removeEnvRow = (type: "FRONTEND" | "BACKEND", index: number) => {
+    if (type === "FRONTEND") {
+      setFrontendEnvVars((prev) => prev.filter((_, i) => i !== index));
+      return;
+    }
+    setBackendEnvVars((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const updateEnvRow = (
+    type: "FRONTEND" | "BACKEND",
+    index: number,
+    field: "name" | "value",
+    value: string
+  ) => {
+    if (type === "FRONTEND") {
+      setFrontendEnvVars((prev) =>
+        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+      );
+      return;
+    }
+    setBackendEnvVars((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,29 +86,34 @@ export default function NewProject() {
     setLoading(true);
 
     try {
+
+      const formatEnvVars = (vars) => 
+      vars.reduce((acc, curr) => {
+        if (curr.name.trim()) {
+          acc[curr.name.trim()] = curr.value;
+        }
+        return acc;
+      }, {});
+
       const response = await axios.post("http://localhost:9000/deployProject/v2", {
         projectName: projectName,
         link: repository,
         frontendDirectory: frontendDir,
         backendDirectory: backendDir,
-        userId: localStorage.getItem("userId")
+        userId: localStorage.getItem("userId"),
+        backendEnvVars: formatEnvVars(backendEnvVars),
+        frontendEnvVars: formatEnvVars(frontendEnvVars),
       }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
 
-      // Backend returns 202 Accepted with { message: "Deployment started", taskId: "..." }
       if (response.status === 200 || response.status === 202) {
         const taskId = response.data?.buildId;
-
         if (taskId) {
-          console.log("Deployment started with taskId:", taskId);
-          // Navigate to deployment logs page
           navigate(`/dashboard/deployments/${taskId}/logs?project=${projectName}`);
         } else {
-          console.error("No taskId in response:", response.data);
-          alert("Deployment started but task ID not found. Check dashboard for updates.");
           navigate("/dashboard");
         }
       }
@@ -118,6 +182,99 @@ export default function NewProject() {
                   value={backendDir}
                   onChange={(e) => setBackendDir(e.target.value)}
                 />
+
+                {trimmedProjectName && (
+                  <div className="rounded-lg border border-border bg-muted/40 p-4 space-y-4">
+                    <h3 className="text-sm font-semibold">Generated URLs For This Project</h3>
+                    <p className="text-xs text-foreground/60">
+                      These are the URLs that will be generated at project creation. You can copy and use them in environment variables.
+                    </p>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-medium text-foreground/70">Frontend URL</label>
+                      <div className="flex gap-2">
+                        <Input value={generatedFrontendUrl} readOnly className="font-mono text-xs" />
+                        <Button type="button" variant="outline" onClick={() => copyToClipboard(generatedFrontendUrl)}>
+                          Copy
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-medium text-foreground/70">Backend URL</label>
+                      <div className="flex gap-2">
+                        <Input value={generatedBackendUrl} readOnly className="font-mono text-xs" />
+                        <Button type="button" variant="outline" onClick={() => copyToClipboard(generatedBackendUrl)}>
+                          Copy
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-3 border border-border rounded-md p-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold">Frontend Environment Variables</h3>
+                    <Button type="button" variant="outline" onClick={() => addEnvRow("FRONTEND")}>Add</Button>
+                  </div>
+                  {frontendEnvVars.map((env, idx) => (
+                    <div key={`frontend-${idx}`} className="grid grid-cols-12 gap-2">
+                      <Input
+                        className="col-span-5"
+                        placeholder="KEY (e.g. VITE_API_URL)"
+                        value={env.name}
+                        onChange={(e) => updateEnvRow("FRONTEND", idx, "name", e.target.value)}
+                      />
+                      <Input
+                        className="col-span-6"
+                        placeholder="VALUE"
+                        value={env.value}
+                        onChange={(e) => updateEnvRow("FRONTEND", idx, "value", e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="col-span-1"
+                        onClick={() => removeEnvRow("FRONTEND", idx)}
+                        disabled={frontendEnvVars.length === 1}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="space-y-3 border border-border rounded-md p-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold">Backend Environment Variables</h3>
+                    <Button type="button" variant="outline" onClick={() => addEnvRow("BACKEND")}>Add</Button>
+                  </div>
+                  {backendEnvVars.map((env, idx) => (
+                    <div key={`backend-${idx}`} className="grid grid-cols-12 gap-2">
+                      <Input
+                        className="col-span-5"
+                        placeholder="KEY (e.g. DATABASE_URL)"
+                        value={env.name}
+                        onChange={(e) => updateEnvRow("BACKEND", idx, "name", e.target.value)}
+                      />
+                      <Input
+                        className="col-span-6"
+                        placeholder="VALUE"
+                        value={env.value}
+                        onChange={(e) => updateEnvRow("BACKEND", idx, "value", e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="col-span-1"
+                        onClick={() => removeEnvRow("BACKEND", idx)}
+                        disabled={backendEnvVars.length === 1}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                </div>
 
                 {/* Buttons */}
                 <div className="flex gap-3">
