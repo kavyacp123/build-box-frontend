@@ -71,7 +71,7 @@ export default function BackendLogs() {
     setLoading(true);
     setError(null);
 
-    const runtimeApiUrl = import.meta.env.VITE_RUNTIME_LOGS_URL || "http://localhost:9001";
+    const runtimeApiUrl = import.meta.env.VITE_RUNTIME_LOGS_URL || "http://localhost:9012";
     const streamUrl = `${runtimeApiUrl}/api/v2/runtime/${slug}/logs`;
     const eventSource = new EventSource(streamUrl);
     eventSourceRef.current = eventSource;

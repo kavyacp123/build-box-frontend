@@ -45,7 +45,7 @@ export default function DeploymentLogs() {
     setLoading(true);
 
     const eventSource = new EventSource(
-      `http://localhost:9001/api/v2/buildLogs/${taskId}/logs`
+      `http://localhost:9012/api/v2/buildLogs/${taskId}/logs`
     );
 
     const handleMessage = (event: MessageEvent) => {

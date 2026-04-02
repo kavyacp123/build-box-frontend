@@ -52,46 +52,6 @@ const features = [
   },
 ];
 
-const pricingPlans = [
-  {
-    name: "Starter",
-    price: "0",
-    description: "Perfect for hobbyists",
-    features: [
-      "Up to 3 projects",
-      "5GB bandwidth",
-      "Community support",
-      "Preview URLs",
-    ],
-  },
-  {
-    name: "Pro",
-    price: "29",
-    description: "For professional developers",
-    highlighted: true,
-    features: [
-      "Unlimited projects",
-      "100GB bandwidth",
-      "Priority support",
-      "Custom domains",
-      "Advanced analytics",
-      "Team collaboration",
-    ],
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "For large-scale teams",
-    features: [
-      "Everything in Pro",
-      "Custom bandwidth",
-      "24/7 support",
-      "SLA guarantee",
-      "Dedicated infrastructure",
-      "SSO & Audit logs",
-    ],
-  },
-];
 
 const trustedCompanies = [
   "Airbnb",
@@ -445,68 +405,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section
-        id="pricing"
-        className="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 font-heading">
-              PRICING
-            </h2>
-            <p className="text-xl text-white/50 max-w-2xl mx-auto">
-              Start for free. Scale when you need to.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative p-8 border backdrop-blur-sm transition-all duration-300 ${plan.highlighted
-                  ? "bg-primary/5 border-primary/50 shadow-[0_0_30px_rgba(0,180,216,0.1)] scale-105 z-10"
-                  : "bg-card/20 border-white/10 hover:border-white/20"
-                  }`}
-              >
-                {plan.highlighted && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">
-                    Most Popular
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold mb-2 font-heading">
-                  {plan.name}
-                </h3>
-                <p className="text-white/50 mb-8 text-sm">{plan.description}</p>
-                <div className="mb-8">
-                  <span className="text-5xl font-bold font-heading">
-                    ${plan.price}
-                  </span>
-                  {plan.price !== "Custom" && (
-                    <span className="text-white/30 ml-2">/mo</span>
-                  )}
-                </div>
-                <Button
-                  className={`w-full mb-8 h-12 font-bold ${plan.highlighted
-                    ? "bg-primary hover:bg-primary/90 text-primary-foreground"
-                    : "bg-white/10 hover:bg-white/20 text-white"
-                    }`}
-                >
-                  CHOOSE {plan.name.toUpperCase()}
-                </Button>
-                <ul className="space-y-4">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-primary shrink-0" />
-                      <span className="text-sm text-white/70">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-24 px-4 text-center">
@@ -545,7 +443,6 @@ export default function Landing() {
             <h4 className="font-bold mb-4 font-heading">PRODUCT</h4>
             <ul className="space-y-2 text-sm text-white/50">
               <li><a href="#" className="hover:text-primary transition-colors">Features</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Pricing</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Changelog</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Docs</a></li>
             </ul>
