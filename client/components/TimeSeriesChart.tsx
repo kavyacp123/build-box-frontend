@@ -27,7 +27,7 @@ export function TimeSeriesChart({ projectSlug, accountId, days, interval = 'day'
       try {
         setLoading(true);
         setError(null);
-        const analyticsApiUrl = import.meta.env.VITE_ANALYTICS_API_URL || 'http://localhost:9012/api';
+        const analyticsApiUrl = import.meta.env.VITE_ANALYTICS_API_URL || 'http://localhost:9001/api';
         
         let url: string;
         if (projectSlug) {
