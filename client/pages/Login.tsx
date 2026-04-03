@@ -11,6 +11,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDemoLogin = async () => {
     setLoading(true);
@@ -58,8 +59,11 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     // Simulate auth delay
     if (email === "" || password === "") {
+      setLoading(false);
+      setError("Please enter both email and password.");
       return;
     }
     try {
@@ -73,8 +77,13 @@ export default function Login() {
         localStorage.setItem("accountId", id); 
         navigate("/dashboard");
       }
-    } catch (e) {
-      console.log(e)
+    } catch (e: any) {
+      console.error(e);
+      if (axios.isAxiosError(e) && e.response) {
+        setError(typeof e.response.data === "string" ? e.response.data : "Invalid credentials.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }
@@ -155,6 +164,11 @@ export default function Login() {
 
           {/* Email/Password form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md">
+                {error}
+              </div>
+            )}
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
                 Email
