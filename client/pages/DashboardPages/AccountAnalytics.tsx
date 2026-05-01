@@ -33,7 +33,7 @@ export default function AccountAnalytics() {
         
         // Use accountId if available, fallback to userId, then to 'default'
         const accountId = localStorage.getItem('accountId') || localStorage.getItem('userId') || 'default';
-        const analyticsApiUrl = import.meta.env.VITE_ANALYTICS_API_URL || 'http://localhost:9001/api';
+        const analyticsApiUrl = import.meta.env.VITE_ANALYTICS_API_URL || 'http://localhost:9012/api';
         
         console.log('[AccountAnalytics] Fetching from:', `${analyticsApiUrl}/analytics/account`);
         console.log('[AccountAnalytics] AccountId:', accountId);

@@ -63,6 +63,11 @@ export default function ProjectDetail() {
     setTimeout(() => setCopied(null), 2000);
   };
 
+  // Compute production URLs from slug
+  const PLATFORM_DOMAIN = import.meta.env.VITE_PLATFORM_DOMAIN || "buildbox.tech";
+  const backendUrl = project ? `https://${project.slug}-api.${PLATFORM_DOMAIN}` : null;
+  const frontendUrl = project?.deploy_url || null;
+
   if (loading) {
     return (
       <div className="flex h-screen bg-background">
@@ -201,18 +206,26 @@ export default function ProjectDetail() {
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <ExternalLink className="w-5 h-5 text-primary" /> Deployment
               </h2>
-              <InfoField label="Deployment URL" value={project.deploy_url} copyable link />
-              <InfoField label="Backend Link" value={project.backend_link} copyable link />
+              <InfoField label="Frontend URL" value={frontendUrl} copyable link />
+              <InfoField label="Backend API URL" value={backendUrl} copyable link />
             </Card>
 
             {/* Actions */}
             <div className="flex gap-3 mb-8">
               <Button
-                onClick={() => window.open(project.deploy_url, "_blank")}
-                disabled={!project.deploy_url}
+                onClick={() => window.open(frontendUrl || "#", "_blank")}
+                disabled={!frontendUrl}
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
-                Visit Deployment
+                Visit Frontend
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => window.open(backendUrl || "#", "_blank")}
+                disabled={!backendUrl}
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Visit Backend API
               </Button>
               <Button
                 variant="outline"

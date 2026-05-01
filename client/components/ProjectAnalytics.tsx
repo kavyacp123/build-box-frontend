@@ -34,7 +34,7 @@ export function ProjectAnalytics({ projectSlug }: ProjectAnalyticsProps) {
       try {
         setLoading(true);
         setError(null);
-        const analyticsApiUrl = import.meta.env.VITE_ANALYTICS_API_URL || 'http://localhost:9001/api';
+        const analyticsApiUrl = import.meta.env.VITE_ANALYTICS_API_URL || 'http://localhost:9012/api';
         
         console.log('[ProjectAnalytics] Fetching from:', `${analyticsApiUrl}/analytics/projects/${projectSlug}`);
         
